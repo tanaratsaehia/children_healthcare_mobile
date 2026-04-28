@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'ui/onboarding/setup_profile_page.dart';
+
+void main() {
+  runApp(
+    // ProviderScope is required for Riverpod to work
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Baby Neo App',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6B9BFF)),
+        useMaterial3: true,
+      ),
+      // Point the home property to the new setup page
+      home: const SetupProfilePage(), 
+    );
+  }
+}
