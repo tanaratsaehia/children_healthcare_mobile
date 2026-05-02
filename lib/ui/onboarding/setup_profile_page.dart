@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Required for input formatters (number only)
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../state/profile_state.dart';
 import '../main_navigation.dart';
@@ -270,7 +270,7 @@ class _SetupProfilePageState extends ConsumerState<SetupProfilePage> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF5A5A5A)),
           dropdownColor: Colors.white,
           decoration: InputDecoration(

@@ -1,4 +1,4 @@
-# children_health_care_mobile
+# children_healthcare_mobile
 
 A new Flutter project.
 
