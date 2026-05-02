@@ -27,6 +27,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   // Generalized test event function accepting alert configuration
   void _triggerTestEvent(AlertConfig config) {
     int secondsRemaining = 3;
+    StateSetter? updateOverlay;
 
     // 1. Save Test Notification Data first
     ref.read(notificationProvider.notifier).addTestNotification("${config.message} (Test Event)");
@@ -41,14 +42,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           color: Colors.transparent,
           child: StatefulBuilder(
             builder: (context, setOverlayState) {
-              Timer.periodic(const Duration(seconds: 1), (timer) {
-                if (secondsRemaining > 0) {
-                  secondsRemaining--;
-                  if (mounted) setOverlayState(() {});
-                } else {
-                  timer.cancel();
-                }
-              });
+              updateOverlay = setOverlayState;
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -81,9 +75,22 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     Overlay.of(context).insert(overlayEntry);
 
+    Timer? localPeriodicTimer;
+    localPeriodicTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (secondsRemaining > 0) {
+        secondsRemaining--;
+        if (mounted && updateOverlay != null) {
+          updateOverlay!(() {});
+        }
+      } else {
+        timer.cancel();
+      }
+    });
+
     // 3. Navigation Countdown (Wait 3 seconds)
     _countdownTimer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
+        localPeriodicTimer?.cancel();
         overlayEntry.remove();
 
         // Navigate to the generic alert page, passing specific configurations
@@ -102,6 +109,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       body: SingleChildScrollView(
@@ -109,14 +118,32 @@ class _HomePageState extends ConsumerState<HomePage> {
           children: [
             // Top Section with Blue Curve
             Stack(
+              clipBehavior: Clip.none,
               children: [
-                Container(
-                  height: 220,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF98C1FF),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
-                      bottomRight: Radius.circular(40),
+                // Secondary light blue circle (shadow peeking out)
+                // Positioned(
+                //   top: -510,
+                //   // Center this circle at 35% of the screen width (shifted further left)
+                //   left: (screenWidth * 0.35) - 400, 
+                //   child: Container(
+                //     width: 800,
+                //     height: 800,
+                //     decoration: const BoxDecoration(
+                //       color: Color(0xFFD6E4FF), // Light shadow
+                //       shape: BoxShape.circle,
+                //     ),
+                //   ),
+                // ),
+                // Main Blue Circle
+                Positioned(
+                  top: -460,
+                  left: (screenWidth * 0.40) - 400, 
+                  child: Container(
+                    width: 800,
+                    height: 800,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF98C1FF),
+                      shape: BoxShape.circle,
                     ),
                   ),
                 ),
@@ -129,10 +156,35 @@ class _HomePageState extends ConsumerState<HomePage> {
                         // Top Bar
                         Row(
                           children: [
-                            const CircleAvatar(
-                              radius: 25,
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.child_care, color: Colors.blue),
+                            Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                const CircleAvatar(
+                                  radius: 26,
+                                  backgroundColor: Colors.white,
+                                  child: CircleAvatar(
+                                    radius: 24,
+                                    backgroundImage: AssetImage('assets/images/baby.png'),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF16A34A), // vibrant green
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.white, width: 2),
+                                    ),
+                                    child: const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 10,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(width: 12),
                             const Column(
@@ -175,16 +227,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                             controller: PageController(viewportFraction: 0.95),
                             children: const [
                               DeviceCard(
-                                title: "Increasing light intensity",
+                                title: "Increasing\nlight intensity",
                                 value: "30",
                                 unit: "nm",
                                 deviceName: "Phototherapy",
+                                imagePath: 'assets/images/phototherapy.png',
+                                imageWidth: 150,
+                                imageBottom: -15,
+                                imageRight: 10,
                               ),
                               DeviceCard(
                                 title: "NEOLA wristband\n068-1",
                                 value: "68%",
                                 unit: "17hr life",
                                 deviceName: "Neola",
+                                imagePath: 'assets/images/neola_band.png',
+                                imageWidth: 230,
+                                imageTop: 45,
                               ),
                             ],
                           ),
@@ -210,33 +269,49 @@ class _HomePageState extends ConsumerState<HomePage> {
                   
                   // Bilirubin Card
                   DataRowCard(
-                    value: "35", unit: "mg/dl", title: "Bilirubin", status: "Safe", 
-                    borderColor: Colors.greenAccent.shade400,
-                    onTap: () => _triggerTestEvent(TestAlertConfigs.bilirubin), // Trigger Bilirubin Alert
+                    value: "35",
+                    unit: "mg/dl",
+                    title: "Billrubin",
+                    status: "Safe",
+                    borderColor: const Color(0xFFFDE047), // Yellow
+                    valueColor: const Color(0xFF84CC16), // Green
+                    onTap: () => _triggerTestEvent(TestAlertConfigs.bilirubin),
                   ),
                   const SizedBox(height: 10),
                   
                   // Glucose Card
                   DataRowCard(
-                    value: "50", unit: "mg/dl", title: "Glucose", status: "Safe", 
-                    borderColor: Colors.orangeAccent,
-                    onTap: () => _triggerTestEvent(TestAlertConfigs.glucose), // Trigger Glucose Alert
+                    value: "50",
+                    unit: "mg/dl",
+                    title: "Glucose",
+                    status: "Safe",
+                    borderColor: const Color(0xFFD8B4FE), // Light Purple
+                    valueColor: const Color(0xFFF97316), // Orange
+                    onTap: () => _triggerTestEvent(TestAlertConfigs.glucose),
                   ),
                   const SizedBox(height: 10),
                   
                   // Hemoglobin Card
                   DataRowCard(
-                    value: "40", unit: "mg/dl", title: "Hemoglobin", status: "Safe", 
-                    borderColor: Colors.pinkAccent.shade100,
-                    onTap: () => _triggerTestEvent(TestAlertConfigs.hemoglobin), // Trigger Hemoglobin Alert
+                    value: "40",
+                    unit: "mg/dl",
+                    title: "Hemoglobin",
+                    status: "Safe",
+                    borderColor: const Color(0xFFF9A8D4), // Pink
+                    valueColor: const Color(0xFF84CC16), // Green
+                    onTap: () => _triggerTestEvent(TestAlertConfigs.hemoglobin),
                   ),
                   const SizedBox(height: 10),
                   
                   // Oxygen Card
                   DataRowCard(
-                    value: "40", unit: "%", title: "Oxygen", status: "Safe", 
-                    borderColor: Colors.orangeAccent,
-                    onTap: () => _triggerTestEvent(TestAlertConfigs.oxygen), // Trigger Oxygen Alert
+                    value: "40",
+                    unit: "%",
+                    title: "Oxygen",
+                    status: "Safe",
+                    borderColor: const Color(0xFFFDBA74), // Light Orange
+                    valueColor: const Color(0xFF84CC16), // Green
+                    onTap: () => _triggerTestEvent(TestAlertConfigs.oxygen),
                   ),
                 ],
               ),

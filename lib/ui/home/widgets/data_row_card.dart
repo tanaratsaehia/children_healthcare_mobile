@@ -6,7 +6,8 @@ class DataRowCard extends StatelessWidget {
   final String title;
   final String status;
   final Color borderColor;
-  final VoidCallback? onTap; // Add this parameter
+  final Color valueColor;
+  final VoidCallback? onTap;
 
   const DataRowCard({
     super.key,
@@ -15,7 +16,8 @@ class DataRowCard extends StatelessWidget {
     required this.title,
     required this.status,
     required this.borderColor,
-    this.onTap, // Add this to constructor
+    required this.valueColor,
+    this.onTap,
   });
 
   @override
@@ -29,26 +31,61 @@ class DataRowCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: borderColor, width: 2),
+          border: Border.all(color: borderColor, width: 5),
         ),
         child: Row(
           children: [
-            Text(value, style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: borderColor)),
-            const SizedBox(width: 4),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Text(unit, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+            SizedBox(
+              width: 110, // Fixed width for value+unit to align columns
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 46,
+                      fontWeight: FontWeight.bold,
+                      color: valueColor,
+                      height: 1.0,
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  Text(
+                    unit,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(width: 20),
+            const SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text(status, style: const TextStyle(fontSize: 14, color: Colors.black54)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  status,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
               ],
             ),
             const Spacer(),
-            Icon(Icons.bookmark_border, color: Colors.blue.shade200),
+            Icon(Icons.bookmark_border, color: Colors.blue.shade300),
           ],
         ),
       ),
