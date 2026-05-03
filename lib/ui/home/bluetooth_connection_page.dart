@@ -160,21 +160,54 @@ class _BluetoothConnectionPageState extends ConsumerState<BluetoothConnectionPag
             children: [
               const Spacer(),
               
-              // Big Bluetooth Icon
-              Container(
-                width: 180,
-                height: 180,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black, width: 12),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.bluetooth,
-                    size: 100,
-                    color: Colors.black,
-                  ),
-                ),
+              // Big Animated Icon
+              TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0.0, end: isConnected ? 1.0 : 0.0),
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.elasticOut,
+                builder: (context, value, child) {
+                  return Container(
+                    width: 180,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Color.lerp(Colors.black, Colors.green, value.clamp(0.0, 1.0))!, 
+                        width: 12,
+                      ),
+                      color: Colors.green.withValues(alpha: 0.1 * value.clamp(0.0, 1.0)),
+                    ),
+                    child: Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Transform.scale(
+                            scale: (1.0 - value).clamp(0.0, 1.0),
+                            child: Opacity(
+                              opacity: (1.0 - value).clamp(0.0, 1.0),
+                              child: const Icon(
+                                Icons.bluetooth,
+                                size: 100,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Transform.scale(
+                            scale: value.clamp(0.0, 1.0),
+                            child: Opacity(
+                              opacity: value.clamp(0.0, 1.0),
+                              child: const Icon(
+                                Icons.check_rounded,
+                                size: 100,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
               
               const SizedBox(height: 40),
