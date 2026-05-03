@@ -7,6 +7,8 @@ import '../notifications/notification_page.dart';
 import '../notifications/generic_alert_page.dart'; // Import generalized page
 import 'widgets/device_card.dart';
 import 'widgets/data_row_card.dart';
+import '../../state/bluetooth_state.dart';
+import 'bluetooth_connection_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -110,6 +112,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final bluetoothState = ref.watch(bluetoothProvider);
+    final phototherapyState = bluetoothState.phototherapy;
+    final wristbandState = bluetoothState.wristband;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
@@ -220,30 +225,49 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Horizontal Slider for Devices
                         SizedBox(
                           height: 180,
                           child: PageView(
                             controller: PageController(viewportFraction: 0.95),
-                            children: const [
+                            children: [
                               DeviceCard(
                                 title: "Increasing\nlight intensity",
-                                value: "30",
-                                unit: "nm",
+                                value: phototherapyState.isConnected ? phototherapyState.mainValue : "30",
+                                unit: phototherapyState.isConnected ? phototherapyState.unit : "nm",
                                 deviceName: "Phototherapy",
                                 imagePath: 'assets/images/phototherapy.png',
                                 imageWidth: 150,
                                 imageBottom: -15,
                                 imageRight: 10,
+                                isConnected: phototherapyState.isConnected,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const BluetoothConnectionPage(deviceType: "Phototherapy"),
+                                    ),
+                                  );
+                                },
                               ),
                               DeviceCard(
-                                title: "NEOLA wristband\n068-1",
+                                title: wristbandState.isConnected 
+                                    ? "NEOLA wristband\n${wristbandState.deviceName.replaceAll('NEOLA-Wristband-', '')}" 
+                                    : "NEOLA wristband",
                                 value: "68%",
                                 unit: "17hr life",
                                 deviceName: "Neola",
                                 imagePath: 'assets/images/neola_band.png',
                                 imageWidth: 230,
                                 imageTop: 45,
+                                isConnected: wristbandState.isConnected,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const BluetoothConnectionPage(deviceType: "Wristband"),
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),

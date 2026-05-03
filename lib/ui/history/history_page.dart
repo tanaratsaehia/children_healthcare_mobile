@@ -34,10 +34,8 @@ class HealthRules {
     // Currently, using a universal rule for the mockup.
     // You can split this into 'if (factorName == "Bilirubin") { ... }' later.
     if (value < 40) return const Color(0xFF7ED321); // Normal (Green)
-    if (value < 60)
-      return const Color.fromARGB(255, 212, 195, 10); // Stage 1 (Yellow)
-    if (value < 80)
-      return const Color.fromARGB(255, 254, 157, 0); // Stage 2 (Orange)
+    if (value < 60) return const Color.fromARGB(255, 212, 195, 10); // Stage 1 (Yellow)
+    if (value < 80) return const Color.fromARGB(255, 254, 157, 0); // Stage 2 (Orange)
     return const Color(0xFFD0021B); // Stage 3 (Red)
   }
 

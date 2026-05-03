@@ -12,6 +12,8 @@ class DeviceCard extends StatelessWidget {
   final double? imageBottom;
   final double? imageLeft;
   final double? imageRight;
+  final bool isConnected;
+  final VoidCallback? onTap;
 
   const DeviceCard({
     super.key,
@@ -26,15 +28,28 @@ class DeviceCard extends StatelessWidget {
     this.imageBottom,
     this.imageLeft,
     this.imageRight,
+    this.isConnected = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     bool isNeola = deviceName == "Neola";
 
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    String displayValue = isConnected ? value : "N/A";
+    String displayUnit = isConnected ? unit : "Offline";
+    Color valueColor = isConnected
+        ? (isNeola ? const Color(0xFF65B700) : Colors.blue)
+        : Colors.grey;
+    Color unitColor = isConnected
+        ? (isNeola ? Colors.black : Colors.blue)
+        : Colors.grey;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Stack(
@@ -73,13 +88,13 @@ class DeviceCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
+                    decoration: BoxDecoration(
+                      color: isConnected ? Colors.blue : Colors.grey.shade300,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
-                      Icons.bluetooth,
-                      color: Colors.white,
+                    child: Icon(
+                      isConnected ? Icons.bluetooth_connected : Icons.bluetooth_disabled,
+                      color: isConnected ? Colors.white : Colors.grey.shade600,
                       size: 16,
                     ),
                   ),
@@ -98,48 +113,73 @@ class DeviceCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          value,
-                          style: const TextStyle(
+                          displayValue,
+                          style: TextStyle(
                             fontSize: 38,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF65B700),
+                            color: valueColor,
                             height: 1.0,
                           ),
                         ),
                         Text(
-                          unit,
-                          style: const TextStyle(
+                          displayUnit,
+                          style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: unitColor,
                             height: 1.0,
                           ),
                         ),
                       ],
                     )
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          value,
-                          style: const TextStyle(
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          unit,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ],
-                    ),
+                  : (!isConnected
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              displayValue,
+                              style: TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                                color: valueColor,
+                                height: 1.0,
+                              ),
+                            ),
+                            Text(
+                              displayUnit,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: unitColor,
+                                height: 1.0,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              displayValue,
+                              style: TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                                color: valueColor,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              displayUnit,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: unitColor,
+                              ),
+                            ),
+                          ],
+                        )),
             ),
 
             // The dots at the bottom
@@ -161,6 +201,7 @@ class DeviceCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }
