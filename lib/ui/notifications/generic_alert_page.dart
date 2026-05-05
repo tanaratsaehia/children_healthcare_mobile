@@ -19,7 +19,7 @@ class GenericAlertPage extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: gradientColors,
-            stops: const [0.0, 0.6], // Transition stops to match design
+            stops: const [0.0, 0.6], 
           ),
         ),
         child: SafeArea(
@@ -28,7 +28,6 @@ class GenericAlertPage extends StatelessWidget {
             children: [
               const SizedBox(height: 10),
               
-              // Header Text "Neola" - always white to match design
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.0),
                 child: Text(
@@ -41,33 +40,29 @@ class GenericAlertPage extends StatelessWidget {
                 ),
               ),
               
-              // Use Expanded to vertically group content in the visual center
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Main Alert Icon
                     const Icon(
                       Icons.warning_rounded,
-                      size: 280, // Massive icon from design
-                      color: Color(0xFFED5353), // Soft red matching mockup
+                      size: 280,
+                      color: Color(0xFFED5353),
                     ),
 
-                    // "Caution!" Text
                     const Text(
                       "Caution!",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 56, 
-                        fontWeight: FontWeight.w900, // Extra heavy bold
+                        fontWeight: FontWeight.w900, 
                         color: Colors.black,
-                        height: 1.1, // Keeps text tight
+                        height: 1.1, 
                       ),
                     ),
 
                     const SizedBox(height: 4),
 
-                    // Message text - dynamic parameter
                     Text(
                       message,
                       textAlign: TextAlign.center,
@@ -78,14 +73,12 @@ class GenericAlertPage extends StatelessWidget {
                       ),
                     ),
 
-                    // Tight spacing between text and button
                     const SizedBox(height: 30), 
 
-                    // "Understood" Button with shadow container
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 40), 
-                      width: double.infinity, // Stretches button width
-                      height: 60, // Fixed height for chunky design
+                      width: double.infinity, 
+                      height: 60, 
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -97,13 +90,12 @@ class GenericAlertPage extends StatelessWidget {
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigate back to HomePage (popping the alert stack)
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFDFF3FE), // Very light blue
+                          backgroundColor: const Color(0xFFDFF3FE), 
                           foregroundColor: const Color(0xFF1A1A1A), 
-                          elevation: 0, // Shadows handled by container
+                          elevation: 0, 
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -118,7 +110,6 @@ class GenericAlertPage extends StatelessWidget {
                       ),
                     ),
                     
-                    // Spacer at bottom to keep the Whole central block balanced
                     const SizedBox(height: 40), 
                   ],
                 ),

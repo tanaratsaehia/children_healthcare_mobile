@@ -22,9 +22,8 @@ class DataRowCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Wrap with InkWell for ripple effect on tap
     return InkWell(
-      onTap: onTap, // Hook up the tap event
+      onTap: onTap, 
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -36,7 +35,7 @@ class DataRowCard extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: 110, // Fixed width for value+unit to align columns
+              width: 110, 
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,

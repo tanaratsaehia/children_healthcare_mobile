@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import '../notifications/notification_page.dart';
 
-// ==========================================
-// 1. DATA MODEL (Production Ready)
-// ==========================================
-// In production, you will generate a List of these objects from your ESP32/Cloud data.
 class HistoryRecord {
   final String title; // e.g., "Hours1"
   final String date; // e.g., "18/02/26"
@@ -25,14 +21,9 @@ class HistoryRecord {
   });
 }
 
-// ==========================================
-// 2. THE RULE ENGINE (Easily Editable)
-// ==========================================
-// Edit these thresholds when you finalize your medical parameters.
+
 class HealthRules {
   static Color evaluateFactorColor(String factorName, double value) {
-    // Currently, using a universal rule for the mockup.
-    // You can split this into 'if (factorName == "Bilirubin") { ... }' later.
     if (value < 40) return const Color(0xFF7ED321); // Normal (Green)
     if (value < 60) return const Color.fromARGB(255, 212, 195, 10); // Stage 1 (Yellow)
     if (value < 80) return const Color.fromARGB(255, 254, 157, 0); // Stage 2 (Orange)
@@ -55,9 +46,6 @@ class HealthRules {
   }
 }
 
-// ==========================================
-// 3. THE UI PAGE
-// ==========================================
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 
@@ -66,7 +54,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  // Mockup Data - Replace this list with an API call in production
+  // Mockup Data 
   final List<HistoryRecord> mockData = [
     HistoryRecord(
       title: "Hours1",
@@ -109,12 +97,11 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF98C1FF), // Top blue background
+      backgroundColor: const Color(0xFF98C1FF), 
       body: SafeArea(
-        bottom: false, // Allows the white container to go all the way down
+        bottom: false,
         child: Column(
           children: [
-            // --- Custom Top App Bar ---
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,
@@ -122,7 +109,6 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
               child: Row(
                 children: [
-                  // Back Button (Hides Bottom Nav automatically because it pops the page)
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: Container(
@@ -148,7 +134,6 @@ class _HistoryPageState extends State<HistoryPage> {
                     ),
                   ),
                   const Spacer(),
-                  // Notification Icon
                   IconButton(
                     icon: const Stack(
                       children: [
@@ -168,7 +153,6 @@ class _HistoryPageState extends State<HistoryPage> {
                       ],
                     ),
                     onPressed: () {
-                      // Pushes the Notification page over the History page
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -239,7 +223,7 @@ class _HistoryPageState extends State<HistoryPage> {
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFE5F0FE), // Light blue background
+        color: const Color(0xFFE5F0FE),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -320,16 +304,14 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  // Widget to build the inner white data pills
   Widget _buildDataPill(String title, double value, String unit) {
-    // 1. Evaluate the color using our Rule Engine
     Color valueColor = HealthRules.evaluateFactorColor(title, value);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(30), // Pill shape
+        borderRadius: BorderRadius.circular(30), 
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -341,7 +323,6 @@ class _HistoryPageState extends State<HistoryPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Stack to position the unit slightly below the number
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,

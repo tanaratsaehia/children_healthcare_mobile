@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../state/notification_state.dart';
-import '../../state/test_alert_configs.dart'; // Import configs
+import '../../state/test_alert_configs.dart';
 import '../notifications/notification_page.dart';
-import '../notifications/generic_alert_page.dart'; // Import generalized page
+import '../notifications/generic_alert_page.dart';
 import 'widgets/device_card.dart';
 import 'widgets/data_row_card.dart';
 import '../../state/bluetooth_state.dart';
@@ -26,15 +26,12 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.dispose();
   }
 
-  // Generalized test event function accepting alert configuration
   void _triggerTestEvent(AlertConfig config) {
     int secondsRemaining = 3;
     StateSetter? updateOverlay;
 
-    // 1. Save Test Notification Data first
     ref.read(notificationProvider.notifier).addTestNotification("${config.message} (Test Event)");
 
-    // 2. Show Small Countdown Popup at bottom
     OverlayEntry overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         bottom: 100,
@@ -89,13 +86,11 @@ class _HomePageState extends ConsumerState<HomePage> {
       }
     });
 
-    // 3. Navigation Countdown (Wait 3 seconds)
     _countdownTimer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
         localPeriodicTimer?.cancel();
         overlayEntry.remove();
 
-        // Navigate to the generic alert page, passing specific configurations
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -178,7 +173,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   child: Container(
                                     padding: const EdgeInsets.all(2),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF16A34A), // vibrant green
+                                      color: const Color(0xFF16A34A),
                                       shape: BoxShape.circle,
                                       border: Border.all(color: Colors.white, width: 2),
                                     ),

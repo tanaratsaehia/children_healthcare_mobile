@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../state/profile_state.dart';
-import '../../state/notification_state.dart'; // Required for wiping notifications
+import '../../state/notification_state.dart'; 
 import '../onboarding/setup_profile_page.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -199,7 +199,6 @@ class SettingsPage extends ConsumerWidget {
                     }
 
                     if (clearHistory) {
-                      // Wipes only the dynamic test notifications
                       ref.read(notificationProvider.notifier).clearDynamicNotifications();
                     }
 

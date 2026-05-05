@@ -182,7 +182,7 @@ class DeviceCard extends StatelessWidget {
                         )),
             ),
 
-            // The dots at the bottom
+            // dots at the bottom
             const Positioned(
               bottom: 5,
               left: 0,

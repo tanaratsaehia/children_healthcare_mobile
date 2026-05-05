@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// The data model
 class BabyProfile {
   final String age;
   final String weight;
@@ -15,11 +14,10 @@ class BabyProfile {
   });
 }
 
-// The modern Riverpod Notifier
 class ProfileNotifier extends Notifier<BabyProfile> {
   @override
   BabyProfile build() {
-    return BabyProfile(); // Initial empty state
+    return BabyProfile(); 
   }
 
   void saveProfile({
@@ -37,7 +35,6 @@ class ProfileNotifier extends Notifier<BabyProfile> {
   }
 }
 
-// The provider we will call from any page to access the data
 final profileProvider = NotifierProvider<ProfileNotifier, BabyProfile>(() {
   return ProfileNotifier();
 });

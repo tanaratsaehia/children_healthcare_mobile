@@ -16,7 +16,6 @@ class _SetupProfilePageState extends ConsumerState<SetupProfilePage> {
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _gestationalAgeController = TextEditingController();
   
-  // Replaced gender controller with a string variable for the dropdown
   String? _selectedGender; 
 
   @override
@@ -28,13 +27,12 @@ class _SetupProfilePageState extends ConsumerState<SetupProfilePage> {
   }
 
   void _saveAndContinue() {
-    // 1. Validation Check: Ensure all fields are filled
+    // Validation Check Ensure all fields are filled
     if (_ageController.text.trim().isEmpty ||
         _weightController.text.trim().isEmpty ||
         _gestationalAgeController.text.trim().isEmpty ||
         _selectedGender == null) {
       
-      // Show an error message at the bottom of the screen
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please fill in all fields to continue."),
@@ -42,18 +40,16 @@ class _SetupProfilePageState extends ConsumerState<SetupProfilePage> {
           behavior: SnackBarBehavior.floating,
         ),
       );
-      return; // Stop the function here so it doesn't navigate
+      return; 
     }
 
-    // 2. If valid, save the data
     ref.read(profileProvider.notifier).saveProfile(
           age: _ageController.text,
           weight: _weightController.text,
-          gender: _selectedGender!, // Use the dropdown value
+          gender: _selectedGender!, 
           gestationalAge: _gestationalAgeController.text,
         );
 
-    // 3. Navigate to the next page
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const MainNavigation()),
@@ -203,7 +199,6 @@ class _SetupProfilePageState extends ConsumerState<SetupProfilePage> {
     );
   }
 
-  // Updated TextField helper with InputFormatters
   Widget _buildLabeledTextField({
     required String label,
     required TextEditingController controller,
@@ -249,7 +244,6 @@ class _SetupProfilePageState extends ConsumerState<SetupProfilePage> {
     );
   }
 
-  // New Dropdown helper widget matching your design
   Widget _buildLabeledDropdown({
     required String label,
     required String? value,

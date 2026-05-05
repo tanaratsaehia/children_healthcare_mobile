@@ -66,7 +66,7 @@ class BluetoothNotifier extends Notifier<BluetoothAppState> {
     try {
       await device.connect();
       
-      // Update UI to show connected status immediately
+      // Update UI to show connected status
       _updateConnectionState(deviceType, true, device.platformName, "Waiting...", deviceType == "Wristband" ? "ir" : "nm");
 
       // Discover services
