@@ -5,11 +5,13 @@ class NotificationAlert {
   final String message;
   final bool isCritical;
   final bool isDynamic; // TRUE if it's test data, FALSE if it's original mockup data
+  final String time; // HH:mm format
 
   NotificationAlert({
     required this.message,
     this.isCritical = true,
-    this.isDynamic = false, // Defaults to false (original data)
+    this.isDynamic = false,
+    this.time = '',
   });
 }
 
@@ -28,22 +30,22 @@ final List<DailyNotificationGroup> staticMockupData = [
   DailyNotificationGroup(
     dateLabel: "10 Oct. 2025",
     alerts: [
-      NotificationAlert(message: "Bilirubin too high"),
-      NotificationAlert(message: "Oxygen too high"),
-      NotificationAlert(message: "Glucose too high"),
+      NotificationAlert(message: "Bilirubin too high", time: "14:32"),
+      NotificationAlert(message: "Oxygen too high", time: "09:15"),
+      NotificationAlert(message: "Glucose too high", time: "21:47"),
     ],
   ),
   DailyNotificationGroup(
     dateLabel: "9 Oct. 2025",
     alerts: [
-      NotificationAlert(message: "Oxygen too low"),
+      NotificationAlert(message: "Oxygen too low", time: "07:22"),
     ],
   ),
   DailyNotificationGroup(
     dateLabel: "8 Oct. 2025",
     alerts: [
-      NotificationAlert(message: "Bilirubin too high"),
-      NotificationAlert(message: "Oxygen too high"),
+      NotificationAlert(message: "Bilirubin too high", time: "16:05"),
+      NotificationAlert(message: "Oxygen too high", time: "11:38"),
     ],
   ),
 ];
@@ -59,10 +61,12 @@ class NotificationNotifier extends Notifier<List<DailyNotificationGroup>> {
     final now = DateTime.now();
     final formatter = DateFormat('d MMM. yyyy'); // e.g., "2 May. 2026"
     final todayLabel = formatter.format(now);
+    final timeLabel = DateFormat('HH:mm').format(now);
 
     final newAlert = NotificationAlert(
       message: message,
-      isDynamic: true, 
+      isDynamic: true,
+      time: timeLabel,
     );
 
     final List<DailyNotificationGroup> updatedState = List.from(state);

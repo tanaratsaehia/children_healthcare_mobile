@@ -138,23 +138,40 @@ class NotificationPage extends ConsumerWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.warning_rounded, 
-            color: alert.isCritical ? const Color(0xFFED4D4D) : Colors.orange, 
-            size: 36,
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              alert.message,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: Colors.black,
+          if (alert.time.isNotEmpty)
+            Align(
+              alignment: Alignment.topRight,
+              child: Text(
+                alert.time,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black45,
+                ),
               ),
             ),
+          Row(
+            children: [
+              Icon(
+                Icons.warning_rounded,
+                color: alert.isCritical ? const Color(0xFFED4D4D) : Colors.orange,
+                size: 36,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  alert.message,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
